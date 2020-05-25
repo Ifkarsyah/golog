@@ -4,8 +4,15 @@ import (
 	"fmt"
 	c "github.com/Ifkarsyah/golog/color"
 	"log"
+	"os"
 	"runtime"
 )
+
+var isDebug bool
+
+func init() {
+	isDebug = os.Getenv("APP_ENV") == "DEV"
+}
 
 func Success(msg string) {
 	log.Println(commonLog("SUCCESS", c.Green, msg))
@@ -20,11 +27,15 @@ func Warn(msg string) {
 }
 
 func Debug(err error) {
-	log.Println(commonError("DEBUG", c.Red, err))
+	if isDebug {
+		log.Println(commonError("DEBUG", c.Red, err))
+	}
 }
 
 func Fatal(err error) {
-	log.Fatal(commonError("FATAL", c.Purple, err))
+	if isDebug {
+		log.Fatal(commonError("FATAL", c.Purple, err))
+	}
 }
 
 func commonError(tag string, color string, err error) string {
